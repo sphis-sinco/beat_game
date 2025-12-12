@@ -1,4 +1,4 @@
 export/
-haxelib/
+.haxelib/
 dump/
 .DS_Store
