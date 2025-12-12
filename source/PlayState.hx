@@ -72,7 +72,11 @@ class PlayState extends FlxState
 		super.update(elapsed);
 
 		songCurrentTime = songAudio[0].time;
-		songTimeText.text = 'Current time: ' + Std.int(songCurrentTime / 1000);
+		songTimeText.text = 'Current time: ' + songCurrentTime;
+
+		@:privateAccess
+		for (audio in songAudio)
+			FlxG.watch.addQuick('Audio ('+audio._sound.url+') time', audio.time);
 	}
 
 	public function playAudio()
