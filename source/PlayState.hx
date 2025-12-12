@@ -12,28 +12,8 @@ import flixel.FlxState;
 class PlayState extends FlxState
 {
 	public var song:SongJson;
-
 	public var songAudio:Array<FlxSound> = [];
-
-	public function playAudio()
-		for (audio in songAudio)
-			audio.play();
-
-	public function pauseAudio()
-		for (audio in songAudio)
-			audio.pause();
-
-	public function stopAudio()
-		for (audio in songAudio)
-			audio.stop();
-
-	public function setAudioTime(time:Float = 0)
-		for (audio in songAudio)
-			audio.time = time;
-
-	public function setAudioVolume(volume:Float = 1)
-		for (audio in songAudio)
-			audio.volume = volume;
+	public var songTime:Float = 0;
 
 	override public function new(songName:String = 'test')
 	{
@@ -59,7 +39,15 @@ class PlayState extends FlxState
 		{
 			var audio_file:FlxSound = new FlxSound();
 			audio_file.loadStream('assets/songs/' + songName + '/' + sound_file + '.wav');
-			songAudio.push(audio_file);
+			@:privateAccess
+			if (audio_file._sound != null)
+				songAudio.push(audio_file);
+		}
+
+		if (songAudio.length < 1)
+		{
+			Application.current.window.alert('Song is missing sound files, please add some', 'Sound Files required for song');
+			FlxG.switchState(() -> new PlayState('test'));
 		}
 
 		stopAudio();
@@ -75,5 +63,27 @@ class PlayState extends FlxState
 	override public function update(elapsed:Float)
 	{
 		super.update(elapsed);
+
+		songTime = songAudio[0].time;
 	}
+
+	public function playAudio()
+		for (audio in songAudio)
+			audio.play();
+
+	public function pauseAudio()
+		for (audio in songAudio)
+			audio.pause();
+
+	public function stopAudio()
+		for (audio in songAudio)
+			audio.stop();
+
+	public function setAudioTime(time:Float = 0)
+		for (audio in songAudio)
+			audio.time = time;
+
+	public function setAudioVolume(volume:Float = 1)
+		for (audio in songAudio)
+			audio.volume = volume;
 }
