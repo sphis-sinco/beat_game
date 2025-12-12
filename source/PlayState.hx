@@ -1,5 +1,6 @@
 package;
 
+import flixel.text.FlxText;
 import flixel.sound.FlxSound;
 import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.FlxG;
@@ -13,7 +14,8 @@ class PlayState extends FlxState
 {
 	public var song:SongJson;
 	public var songAudio:Array<FlxSound> = [];
-	public var songTime:Float = 0;
+	public var songCurrentTime:Float = 0;
+	public var songTimeText:FlxText;
 
 	override public function new(songName:String = 'test')
 	{
@@ -57,6 +59,11 @@ class PlayState extends FlxState
 	{
 		super.create();
 
+		songTimeText = new FlxText();
+		songTimeText.screenCenter(X);
+		songTimeText.y = 32;
+		add(songTimeText);
+
 		playAudio();
 	}
 
@@ -64,7 +71,8 @@ class PlayState extends FlxState
 	{
 		super.update(elapsed);
 
-		songTime = songAudio[0].time;
+		songCurrentTime = songAudio[0].time;
+		songTimeText.text = 'Current time: ' + Std.int(songCurrentTime / 1000);
 	}
 
 	public function playAudio()
